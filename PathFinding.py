@@ -1,26 +1,30 @@
 import copy
 
 class StreetCleanerAI:
+
     capacity = 20
 
     def removeEdge(self, nodeA, nodeB, Map):
-        """
-        Set edge's weight to 0 on both paths from A to B, and from B to A
-        """
+        """ Set edge's weight to 0 on both paths from A to B, and from B to A """
         for i in range(len(Map[nodeA])):
             if Map[nodeA][i][0] == nodeB:
                 Map[nodeA][i][1] = 0
                 break
+        # to set edges to 0 from both sides
         for i in range(len(Map[nodeB])):
             if Map[nodeB][i][0] == nodeA:
                 Map[nodeB][i][1] = 0
                 break
         return Map
 
+    def removePaths(self, Map, paths):
+        """ Set the already walked path's edges to 0 """
+        for i in range(1, len(paths)):
+            self.removeEdge(paths[i], paths[i - 1], Map)
+        return Map
+
     def findPath(self, start, destination, Map):
-        """
-        Find path from start to destination, while trying to maximise capacity
-        """
+        """ Find path from start to destination, while trying to maximise capacity """
         validPaths = []
         # recursive depth search
         for i in range(len(Map[start])):
@@ -35,13 +39,15 @@ class StreetCleanerAI:
         for i in range(len(validPaths)):
             if validPaths[maxPath][0] > validPaths[i][0]:
                 maxPath = i
-        print(str(validPaths[maxPath][1:]) + ' , used capacity - ' + str(self.capacity - validPaths[maxPath][0]))
-
+        # reverse order for readability
+        BestPath = []
+        for i in range(len(validPaths[maxPath]) - 1, 0, -1):
+            BestPath.append(validPaths[maxPath][i])
+        print(str(BestPath) + ' , used capacity - ' + str(self.capacity - validPaths[maxPath][0]))
+        return BestPath
 
     def checkPath(self, curr, dest, fill, changedMap):
-        """
-        Recursive step trying to find the best path
-        """
+        """ Recursive step trying to find the best path """
         validPaths = []
         if curr != dest:
             # continue recursive search

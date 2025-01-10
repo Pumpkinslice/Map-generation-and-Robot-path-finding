@@ -7,9 +7,7 @@ class MapGenerator:
     graph = []
 
     def checkNode(self, width, height):
-        """
-        Checks if created node is not on edge and doesn't have anything beside it
-        """
+        """ Checks if created node is not on edge and doesn't have anything beside it """
         # check if within boundaries - 1
         if len(self.map[0]) - 1 > width > 0:
             if len(self.map) - 1 > height > 0:
@@ -26,9 +24,7 @@ class MapGenerator:
         return False
 
     def generateNew(self, width, height, initialNodeCount):
-        """
-        Generate new map, also creating grid map and graph tree based on it
-        """
+        """  Generate new map, also creating grid map and graph tree based on it """
         # empty map of given scale
         self.map = []
         self.graph = []
@@ -135,11 +131,8 @@ class MapGenerator:
                         pathLength = pathLength - 1
                     self.graph.append(edges)
 
-
     def printMap(self):
-        """
-        Print out map in console and 2 plots
-        """
+        """ Print out map in console and plot """
         fig, ax = plt.subplots()
         # grid map
         array0W, array0H, array1W, array1H, array2W, array2H = [], [], [], [], [], []
@@ -162,14 +155,15 @@ class MapGenerator:
         plt.legend()
         plt.show()
         plt.close()
-        # graph tree
-        print('')
+
+    def printGraph(self):
+        """ Print out graph tree in console and plot """
         tree = nx.Graph()
         for node in range(len(self.graph)):
             print(str(node) + 'n ' + str(self.graph[node]))
             for connection in range(len(self.graph[node])):
                 tree.add_edge(node, self.graph[node][connection][0], weight=self.graph[node][connection][1])
-        pos = nx.spring_layout(tree, seed=randint(1,10))
+        pos = nx.spring_layout(tree, seed=5)
         nx.draw_networkx_nodes(tree, pos, node_color='orange')
         nx.draw_networkx_edges(tree, pos)
         nx.draw_networkx_labels(tree, pos)
